@@ -1,9 +1,13 @@
 package com.cameraxtutorial
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
@@ -52,6 +56,9 @@ class MainActivity : AppCompatActivity() {
 
         binding.imgCaptureBtn.setOnClickListener {
             takePhoto()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                animateFlash()
+            }
         }
 
     }
@@ -84,7 +91,7 @@ class MainActivity : AppCompatActivity() {
                 imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        Log.i(TAG,"The image has been saved in ${file.toUri()}")
+                        Log.i(TAG, "The image has been saved in ${file.toUri()}")
                     }
 
                     override fun onError(exception: ImageCaptureException) {
@@ -98,6 +105,16 @@ class MainActivity : AppCompatActivity() {
 
                 })
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun animateFlash() {
+        binding.root.postDelayed({
+            binding.root.foreground = ColorDrawable(Color.WHITE)
+            binding.root.postDelayed({
+                binding.root.foreground = null
+            }, 50)
+        }, 100)
     }
 
 
