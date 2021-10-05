@@ -1,5 +1,6 @@
 package com.cameraxtutorial
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -55,12 +56,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.switchBtn.setOnClickListener {
-            cameraSelector = if(cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA){
+            cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
                 CameraSelector.DEFAULT_FRONT_CAMERA
-            }else{
+            } else {
                 CameraSelector.DEFAULT_BACK_CAMERA
             }
             startCamera()
+        }
+        binding.galleryBtn.setOnClickListener {
+            val intent = Intent(this, GalleryActivity::class.java)
+            startActivity(intent)
         }
 
     }
@@ -93,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                 imgCaptureExecutor,
                 object : ImageCapture.OnImageSavedCallback {
                     override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                        Log.i(TAG,"The image has been saved in ${file.toUri()}")
+                        Log.i(TAG, "The image has been saved in ${file.toUri()}")
                     }
 
                     override fun onError(exception: ImageCaptureException) {
